@@ -1,0 +1,54 @@
+body {
+  font: 14px "Century Gothic", Futura, sans-serif;
+  margin: 20px;
+}
+
+main {
+  margin-top: 5rem;
+}
+
+h1 { 
+  text-align: center;
+}
+h3 {
+  text-align: center;
+}
+
+.board {
+  left: 50%;
+  position: absolute;
+  transform: translateX(-50%);
+}
+.board > .square {
+  background: #fff;
+  border: 1px solid #999;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 34px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 34px;
+}
+.board > .square:nth-of-type(3n+1) {
+	clear: left;
+}
+.board > .square:focus {
+  outline: none;
+}
+.board > .square:active {
+  color: black;
+}
+
+.footer {
+	width: 100%;
+	margin-top: 150px;
+}
+#restart {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+}
