@@ -1,9 +1,28 @@
 module Board exposing (..)
 
-import Square exposing (..)
+import Player exposing (Player, playerToString)
 import Array exposing (..)
 
 
-emptyBoard : Array Square
+type alias Square =
+    Maybe Player
+
+
+type Board
+    = Playing (Array Square)
+    | Done (Maybe Player)
+
+
+squareToString : Square -> String
+squareToString square =
+    case square of
+        Nothing ->
+            ""
+
+        Just player ->
+            playerToString player
+
+
+emptyBoard : Board
 emptyBoard =
-    initialize 9 (always Maybe.Nothing)
+    Playing (initialize 9 (always Maybe.Nothing))

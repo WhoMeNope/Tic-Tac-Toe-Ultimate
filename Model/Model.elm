@@ -1,13 +1,12 @@
 module Model exposing (..)
 
 import Player exposing (..)
-import Square exposing (..)
-import Board exposing (..)
+import Board exposing (Board, emptyBoard)
 import Array exposing (..)
 
 
 type alias Model =
-    { squares : Array Square
+    { boards : Array Board
     , turn : Player
     , game : GameState
     }
@@ -15,7 +14,7 @@ type alias Model =
 
 initialModel : Model
 initialModel =
-    { squares = emptyBoard
+    { boards = initialize 9 (always emptyBoard)
     , turn = X
     , game = Started
     }
@@ -23,5 +22,5 @@ initialModel =
 
 type GameState
     = Started
-    | Won
+    | Won Player
     | Drawn

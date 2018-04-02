@@ -4,7 +4,7 @@ body {
 }
 
 main {
-  margin-top: 5rem;
+  margin-top: 2rem;
 }
 
 h1 { 
@@ -14,27 +14,69 @@ h3 {
   text-align: center;
 }
 
-.board {
+header > img {
+	width: 150px;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+
+.game {
   left: 50%;
   position: absolute;
   transform: translateX(-50%);
 }
+
+.game > .board {
+	float: left;
+	width: 99px;
+	height: 99px;
+	border: 2.5px solid #444;
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+}
+.game > .board:nth-of-type(3n+1) {
+  clear: left;
+}
+.game > .board:nth-of-type(3n+1) {
+	border-left: none;
+}
+.game > .board:nth-of-type(3n) {
+	border-right: none;
+}
+.game > .board:nth-of-type(-n+3) {
+	border-top: none;
+}
+.game > .board:nth-of-type(n+7) {
+	border-bottom: none;
+}
+
+.board > .winner {
+	text-align: center;	
+	font-size: 4rem;
+}
 .board > .square {
-  background: #fff;
-  border: 1px solid #999;
-  float: left;
-  font-size: 24px;
-  font-weight: bold;
-  line-height: 34px;
-  height: 34px;
-  margin-right: -1px;
-  margin-top: -1px;
-  padding: 0;
-  text-align: center;
-  width: 34px;
+	background: #fff;
+	border: 1px solid #111;
+	text-align: center;
+	width: 30%;
+	height: 30%;
+	font-size: 1.3rem;
 }
 .board > .square:nth-of-type(3n+1) {
-	clear: left;
+	border-left: none;
+}
+.board > .square:nth-of-type(3n) {
+	border-right: none;
+}
+.board > .square:nth-of-type(-n+3) {
+	border-top: none;
+}
+.board > .square:nth-of-type(n+7) {
+	border-bottom: none;
 }
 .board > .square:focus {
   outline: none;
@@ -44,11 +86,11 @@ h3 {
 }
 
 .footer {
-	width: 100%;
-	margin-top: 150px;
+  width: 100%;
+  margin-top: 400px;
 }
 #restart {
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
