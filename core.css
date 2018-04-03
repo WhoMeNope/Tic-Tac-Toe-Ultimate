@@ -54,6 +54,9 @@ header > img {
 	border-bottom: none;
 }
 
+.board.highlight {
+	background-color: yellow;
+}
 .board > .winner {
 	text-align: center;	
 	font-size: 4rem;

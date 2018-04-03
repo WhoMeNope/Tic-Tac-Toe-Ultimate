@@ -23,27 +23,35 @@ update msg model =
             )
 
         SquareClick bindex sindex ->
-            ( boardClick model bindex sindex, Cmd.none )
+            case model.boardToPlay of
+                Nothing ->
+                    ( boardClick model bindex sindex, Cmd.none )
+
+                Just b ->
+                    if b == bindex then
+                        ( boardClick model bindex sindex, Cmd.none )
+                    else
+                        ( model, Cmd.none )
 
 
-checkGameWinner : Model -> Array Board -> Model
-checkGameWinner model boards =
+checkGameWinner : Model -> GameState
+checkGameWinner model =
     let
         winner =
-            getGameWinner boards
+            getGameWinner model.boards
 
         gameFull =
-            noPlayings boards
+            noPlayings model.boards
     in
         case winner of
             Nothing ->
                 if gameFull then
-                    { model | boards = boards, game = Drawn }
+                    Drawn
                 else
-                    { model | boards = boards }
+                    Started
 
             Just player ->
-                { model | boards = boards, game = Won player }
+                Won player
 
 
 boardClick : Model -> Int -> Int -> Model
@@ -71,9 +79,40 @@ boardClick model bindex sindex =
                 model
 
             Just newboard ->
-                checkGameWinner
-                    { model | turn = newturn }
-                    (Array.set bindex newboard model.boards)
+                let
+                    newmodel =
+                        { model | turn = newturn, boards = (Array.set bindex newboard model.boards) }
+
+                    gamestate =
+                        checkGameWinner newmodel
+
+                    isBoardFull b =
+                        case b of
+                            Board.Done _ ->
+                                True
+
+                            Board.Playing _ ->
+                                False
+
+                    thisBoardFull =
+                        isBoardFull newboard
+
+                    nextBoard =
+                        (Array.get sindex newmodel.boards) |> Maybe.withDefault (Board.Done Nothing)
+
+                    nextBoardFull =
+                        isBoardFull nextBoard
+
+                    toPlayNext =
+                        if nextBoardFull then
+                            if thisBoardFull then
+                                Nothing
+                            else
+                                Just bindex
+                        else
+                            Just sindex
+                in
+                    { newmodel | game = gamestate, boardToPlay = toPlayNext }
 
 
 squareClick : Board -> Player -> Int -> Board
