@@ -14,11 +14,11 @@ import Update exposing (..)
 view : Model -> Html Msg
 view model =
     main_ []
-        [ stylesheet "./core.css"
+        [ stylesheet "./assets/core.css"
         , header []
             [ h1 []
                 [ text "Tic-Tac-Toe" ]
-            , img [ src "./ultimate.svg" ]
+            , img [ src "./assets/ultimate.svg" ]
                 []
             ]
         , viewStatus model.game model.turn
