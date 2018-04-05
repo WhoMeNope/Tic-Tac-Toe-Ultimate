@@ -1,8 +1,13 @@
-all:
-	GOPATH=$(shell pwd) go install server
+all: build
+
+build:
+	GOPATH=$(shell pwd) go build server
+
+run:
+	./server
 
 clean:
-	rm -r bin
+	rm server
 
 .PHONY:
 	clean

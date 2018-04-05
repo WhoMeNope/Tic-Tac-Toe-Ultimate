@@ -1,15 +1,12 @@
 module Update exposing (..)
 
+import Msg exposing (..)
 import List exposing (..)
 import Array exposing (..)
 import Model exposing (..)
 import Player exposing (..)
 import Board exposing (Board, Square)
-
-
-type Msg
-    = SquareClick Int Int
-    | Restart
+import Send exposing (sendClick)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -25,13 +22,16 @@ update msg model =
         SquareClick bindex sindex ->
             case model.boardToPlay of
                 Nothing ->
-                    ( boardClick model bindex sindex, Cmd.none )
+                    boardClick model bindex sindex
 
                 Just b ->
                     if b == bindex then
-                        ( boardClick model bindex sindex, Cmd.none )
+                        boardClick model bindex sindex
                     else
                         ( model, Cmd.none )
+
+        ReceiveClick bindex sindex ->
+            ( { model | turn = togglePlayer model.turn }, Cmd.none )
 
 
 checkGameWinner : Model -> GameState
@@ -54,7 +54,7 @@ checkGameWinner model =
                 Won player
 
 
-boardClick : Model -> Int -> Int -> Model
+boardClick : Model -> Int -> Int -> ( Model, Cmd Msg )
 boardClick model bindex sindex =
     let
         board =
@@ -76,7 +76,7 @@ boardClick model bindex sindex =
     in
         case newboard of
             Nothing ->
-                model
+                ( model, Cmd.none )
 
             Just newboard ->
                 let
@@ -112,7 +112,7 @@ boardClick model bindex sindex =
                         else
                             Just sindex
                 in
-                    { newmodel | game = gamestate, boardToPlay = toPlayNext }
+                    ( { newmodel | game = gamestate, boardToPlay = toPlayNext }, sendClick 0 0 )
 
 
 squareClick : Board -> Player -> Int -> Board

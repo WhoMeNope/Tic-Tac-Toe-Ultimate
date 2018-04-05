@@ -8,7 +8,7 @@ import Array exposing (..)
 import Model exposing (..)
 import Board exposing (Board, Square, squareToString)
 import Player exposing (..)
-import Update exposing (..)
+import Msg exposing (..)
 
 
 view : Model -> Html Msg
