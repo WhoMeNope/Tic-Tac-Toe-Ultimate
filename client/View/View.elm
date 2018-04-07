@@ -81,6 +81,9 @@ viewControls : GameState -> Html Msg
 viewControls game =
     div [ class "footer" ]
         (case game of
+            Connecting ->
+                [ text "" ]
+
             Started ->
                 [ text "" ]
 
@@ -93,33 +96,40 @@ viewControls game =
 
 viewStatus : GameState -> Player -> Html Msg
 viewStatus game player =
-    case game of
-        Started ->
-            div []
-                [ h3
-                    [ id "status" ]
-                    [ text "Turn: " ]
-                , h3
-                    [ id "turn" ]
-                    [ player |> playerToString |> text ]
-                ]
+    let
+        turn =
+            case game of
+                Connecting ->
+                    ""
 
-        Won winner ->
-            div []
-                [ h3
-                    [ id "status" ]
-                    [ text "Winner: " ]
-                , h3
-                    [ id "turn" ]
-                    [ winner |> playerToString |> text ]
-                ]
+                Started ->
+                    player |> playerToString
 
-        Drawn ->
-            div []
-                [ h3
-                    [ id "status" ]
-                    [ text "Draw" ]
-                , h3
-                    [ id "turn" ]
-                    [ "" |> text ]
-                ]
+                Won winner ->
+                    winner |> playerToString
+
+                Drawn ->
+                    ""
+
+        status =
+            case game of
+                Connecting ->
+                    "Connecting..."
+
+                Started ->
+                    "Turn: "
+
+                Won _ ->
+                    "Winner"
+
+                Drawn ->
+                    "Draw"
+    in
+        div []
+            [ h3
+                [ id "status" ]
+                [ text status ]
+            , h3
+                [ id "turn" ]
+                [ text turn ]
+            ]

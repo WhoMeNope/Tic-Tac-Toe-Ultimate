@@ -19,10 +19,16 @@ var upgrader = websocket.Upgrader{
 func echo(w http.ResponseWriter, r *http.Request) {
 	c, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Print("upgrade:", err)
+		log.Println("upgrade:", err)
 		return
 	}
 	defer c.Close()
+
+	err = c.WriteJSON(newConnectedMessage(true, true))
+	if err != nil {
+		log.Println("write:", err)
+		return
+	}
 
 	for {
 		mt, message, err := c.ReadMessage()
@@ -43,6 +49,8 @@ func echo(w http.ResponseWriter, r *http.Request) {
 func main() {
 	flag.Parse()
 	log.SetFlags(0)
+
 	http.HandleFunc("/", echo)
+
 	log.Fatal(http.ListenAndServe(*addr, nil))
 }

@@ -13,25 +13,33 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Restart ->
-            ( { initialModel
-                | turn = model.turn |> togglePlayer
-              }
-            , Cmd.none
-            )
+            ( initialModel, Cmd.none )
 
         SquareClick bindex sindex ->
-            case model.boardToPlay of
-                Nothing ->
-                    boardClick model bindex sindex
-
-                Just b ->
-                    if b == bindex then
+            if model.game == Started then
+                case model.boardToPlay of
+                    Nothing ->
                         boardClick model bindex sindex
-                    else
-                        ( model, Cmd.none )
+
+                    Just b ->
+                        if b == bindex then
+                            boardClick model bindex sindex
+                        else
+                            ( model, Cmd.none )
+            else
+                ( model, Cmd.none )
 
         ReceiveClick bindex sindex ->
-            ( { model | turn = togglePlayer model.turn }, Cmd.none )
+            if model.game == Started then
+                ( { model | turn = togglePlayer model.turn }, Cmd.none )
+            else
+                ( model, Cmd.none )
+
+        ReceiveConnected player turn ->
+            ( { model | game = Started, iam = player, turn = turn }, Cmd.none )
+
+        ReceiveUnknown ->
+            ( model, Cmd.none )
 
 
 checkGameWinner : Model -> GameState
