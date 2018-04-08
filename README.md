@@ -5,3 +5,8 @@ Ultimate variant of a popular game.
 <p align="center">
   <img src="https://github.com/WhoMeNope/Tic-Tac-Toe-Ultimate/blob/master/screenshot.png" alt="screenshot" />
 </p>
+
+To build and run:
+```bash
+make && make run
+```
