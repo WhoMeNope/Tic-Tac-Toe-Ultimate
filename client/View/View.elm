@@ -21,7 +21,7 @@ view model =
             , img [ src "./assets/ultimate.svg" ]
                 []
             ]
-        , viewStatus model.game model.turn
+        , viewStatus model.game model.turn model.iam
         , viewGame model.boardToPlay model.boards
         , viewControls model.game
         ]
@@ -94,8 +94,8 @@ viewControls game =
         )
 
 
-viewStatus : GameState -> Player -> Html Msg
-viewStatus game player =
+viewStatus : GameState -> Player -> Player -> Html Msg
+viewStatus game player iam =
     let
         turn =
             case game of
@@ -117,7 +117,10 @@ viewStatus game player =
                     "Connecting..."
 
                 Started ->
-                    "Turn: "
+                    if player == iam then
+                        "Your turn: "
+                    else
+                        "Waiting for opponnent: "
 
                 Won _ ->
                     "Winner"

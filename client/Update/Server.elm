@@ -6,7 +6,7 @@ import Result exposing (toMaybe)
 
 
 address =
-    "ws://localhost:8080"
+    "ws://localhost:3000/match"
 
 
 type Event

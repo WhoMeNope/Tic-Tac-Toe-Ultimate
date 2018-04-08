@@ -9,7 +9,7 @@ type connectedMessage struct {
 func newConnectedMessage(isX, isXfirst bool) connectedMessage {
 	return connectedMessage{
 		Event:    "CONNECTED",
-		IsX:      true,
-		IsXfirst: true,
+		IsX:      isX,
+		IsXfirst: isXfirst,
 	}
 }

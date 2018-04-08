@@ -17,21 +17,35 @@ update msg model =
 
         SquareClick bindex sindex ->
             if model.game == Started then
-                case model.boardToPlay of
-                    Nothing ->
-                        boardClick model bindex sindex
-
-                    Just b ->
-                        if b == bindex then
+                if model.turn == model.iam then
+                    case model.boardToPlay of
+                        Nothing ->
                             boardClick model bindex sindex
-                        else
-                            ( model, Cmd.none )
+
+                        Just b ->
+                            if b == bindex then
+                                boardClick model bindex sindex
+                            else
+                                ( model, Cmd.none )
+                else
+                    ( model, Cmd.none )
             else
                 ( model, Cmd.none )
 
         ReceiveClick bindex sindex ->
             if model.game == Started then
-                ( { model | turn = togglePlayer model.turn }, Cmd.none )
+                if model.turn == model.iam then
+                    ( model, Cmd.none )
+                else
+                    case model.boardToPlay of
+                        Nothing ->
+                            boardClick model bindex sindex
+
+                        Just b ->
+                            if b == bindex then
+                                boardClick model bindex sindex
+                            else
+                                ( model, Cmd.none )
             else
                 ( model, Cmd.none )
 
@@ -120,7 +134,7 @@ boardClick model bindex sindex =
                         else
                             Just sindex
                 in
-                    ( { newmodel | game = gamestate, boardToPlay = toPlayNext }, sendClick 0 0 )
+                    ( { newmodel | game = gamestate, boardToPlay = toPlayNext }, sendClick bindex sindex )
 
 
 squareClick : Board -> Player -> Int -> Board
