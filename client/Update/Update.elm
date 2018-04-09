@@ -5,7 +5,7 @@ import List exposing (..)
 import Array exposing (..)
 import Model exposing (..)
 import Player exposing (..)
-import Board exposing (Board, Square)
+import Board exposing (Board(Playing, Done), Square, isBoardFull, getBoardWinner)
 import Send exposing (sendClick)
 
 
@@ -54,26 +54,6 @@ update msg model =
 
         ReceiveUnknown ->
             ( model, Cmd.none )
-
-
-checkGameWinner : Model -> GameState
-checkGameWinner model =
-    let
-        winner =
-            getGameWinner model.boards
-
-        gameFull =
-            noPlayings model.boards
-    in
-        case winner of
-            Nothing ->
-                if gameFull then
-                    Drawn
-                else
-                    Started
-
-            Just player ->
-                Won player
 
 
 boardClick : Model -> Int -> Int -> ( Model, Cmd Msg )
@@ -150,10 +130,10 @@ squareClick board player index =
                         Array.set index (Just player) squares
 
                     winner =
-                        getWinner newsquares
+                        getBoardWinner newsquares
 
                     boardFilled =
-                        noNothings newsquares
+                        isBoardFull newsquares
                 in
                     case winner of
                         Nothing ->
@@ -166,91 +146,3 @@ squareClick board player index =
                             Board.Done (Just player)
             else
                 board
-
-
-boardDiagonals =
-    [ [ 0, 1, 2 ]
-    , [ 3, 4, 5 ]
-    , [ 6, 7, 8 ]
-    , [ 0, 3, 6 ]
-    , [ 1, 4, 7 ]
-    , [ 2, 5, 8 ]
-    , [ 0, 4, 8 ]
-    , [ 2, 4, 6 ]
-    ]
-
-
-getGameWinner : Array Board -> Maybe Player
-getGameWinner boards =
-    let
-        lineWinner : List Int -> Maybe Player
-        lineWinner indList =
-            if (allAreSame (List.map (\x -> get x boards) indList)) then
-                let
-                    index =
-                        List.head indList |> Maybe.withDefault -1
-
-                    board =
-                        Array.get index boards |> Maybe.withDefault (Board.Done Nothing)
-                in
-                    case board of
-                        Board.Done (Just p) ->
-                            Just p
-
-                        _ ->
-                            Nothing
-            else
-                Nothing
-    in
-        List.head (List.filterMap lineWinner boardDiagonals)
-
-
-getWinner : Array Square -> Maybe Player
-getWinner squares =
-    let
-        lineWinner : List Int -> Maybe Player
-        lineWinner indList =
-            if (allAreSame (List.map (\x -> get x squares) indList)) then
-                (Maybe.withDefault Nothing (Array.get (Maybe.withDefault -1 (List.head indList)) squares))
-            else
-                Nothing
-    in
-        List.head (List.filterMap lineWinner boardDiagonals)
-
-
-allAreSame : List a -> Bool
-allAreSame xs =
-    case xs of
-        [] ->
-            True
-
-        y :: ys ->
-            List.all ((==) y) ys
-
-
-noPlayings : Array Board -> Bool
-noPlayings xs =
-    let
-        isPlaying v =
-            case v of
-                Board.Playing _ ->
-                    True
-
-                Board.Done _ ->
-                    False
-    in
-        xs |> Array.foldl (::) [] |> List.any isPlaying |> not
-
-
-noNothings : Array (Maybe a) -> Bool
-noNothings xs =
-    let
-        isNothing v =
-            case v of
-                Nothing ->
-                    True
-
-                Just _ ->
-                    False
-    in
-        xs |> Array.foldl (::) [] |> List.any isNothing |> not

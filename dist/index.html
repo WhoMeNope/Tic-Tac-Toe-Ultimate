@@ -9272,16 +9272,259 @@ var _user$project$Player$togglePlayer = function (player) {
 		return _user$project$Player$X;
 	}
 };
+var _user$project$Board$noNothings = function (xs) {
+	var isNothing = function (v) {
+		var _p0 = v;
+		if (_p0.ctor === 'Nothing') {
+			return true;
+		} else {
+			return false;
+		}
+	};
+	return !A2(
+		_elm_lang$core$List$any,
+		isNothing,
+		A3(
+			_elm_lang$core$Array$foldl,
+			F2(
+				function (x, y) {
+					return {ctor: '::', _0: x, _1: y};
+				}),
+			{ctor: '[]'},
+			xs));
+};
+var _user$project$Board$noPlayings = function (xs) {
+	var isPlaying = function (v) {
+		var _p1 = v;
+		if (_p1.ctor === 'Playing') {
+			return true;
+		} else {
+			return false;
+		}
+	};
+	return !A2(
+		_elm_lang$core$List$any,
+		isPlaying,
+		A3(
+			_elm_lang$core$Array$foldl,
+			F2(
+				function (x, y) {
+					return {ctor: '::', _0: x, _1: y};
+				}),
+			{ctor: '[]'},
+			xs));
+};
+var _user$project$Board$allAreSame = function (xs) {
+	var _p2 = xs;
+	if (_p2.ctor === '[]') {
+		return true;
+	} else {
+		return A2(
+			_elm_lang$core$List$all,
+			F2(
+				function (x, y) {
+					return _elm_lang$core$Native_Utils.eq(x, y);
+				})(_p2._0),
+			_p2._1);
+	}
+};
+var _user$project$Board$isGameFull = function (boards) {
+	return _user$project$Board$noPlayings(boards);
+};
+var _user$project$Board$isBoardFull = function (squares) {
+	return _user$project$Board$noNothings(squares);
+};
+var _user$project$Board$boardDiagonals = {
+	ctor: '::',
+	_0: {
+		ctor: '::',
+		_0: 0,
+		_1: {
+			ctor: '::',
+			_0: 1,
+			_1: {
+				ctor: '::',
+				_0: 2,
+				_1: {ctor: '[]'}
+			}
+		}
+	},
+	_1: {
+		ctor: '::',
+		_0: {
+			ctor: '::',
+			_0: 3,
+			_1: {
+				ctor: '::',
+				_0: 4,
+				_1: {
+					ctor: '::',
+					_0: 5,
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		_1: {
+			ctor: '::',
+			_0: {
+				ctor: '::',
+				_0: 6,
+				_1: {
+					ctor: '::',
+					_0: 7,
+					_1: {
+						ctor: '::',
+						_0: 8,
+						_1: {ctor: '[]'}
+					}
+				}
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '::',
+					_0: 0,
+					_1: {
+						ctor: '::',
+						_0: 3,
+						_1: {
+							ctor: '::',
+							_0: 6,
+							_1: {ctor: '[]'}
+						}
+					}
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '::',
+						_0: 1,
+						_1: {
+							ctor: '::',
+							_0: 4,
+							_1: {
+								ctor: '::',
+								_0: 7,
+								_1: {ctor: '[]'}
+							}
+						}
+					},
+					_1: {
+						ctor: '::',
+						_0: {
+							ctor: '::',
+							_0: 2,
+							_1: {
+								ctor: '::',
+								_0: 5,
+								_1: {
+									ctor: '::',
+									_0: 8,
+									_1: {ctor: '[]'}
+								}
+							}
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '::',
+								_0: 0,
+								_1: {
+									ctor: '::',
+									_0: 4,
+									_1: {
+										ctor: '::',
+										_0: 8,
+										_1: {ctor: '[]'}
+									}
+								}
+							},
+							_1: {
+								ctor: '::',
+								_0: {
+									ctor: '::',
+									_0: 2,
+									_1: {
+										ctor: '::',
+										_0: 4,
+										_1: {
+											ctor: '::',
+											_0: 6,
+											_1: {ctor: '[]'}
+										}
+									}
+								},
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+};
+var _user$project$Board$getBoardWinner = function (squares) {
+	var lineWinner = function (indList) {
+		return _user$project$Board$allAreSame(
+			A2(
+				_elm_lang$core$List$map,
+				function (x) {
+					return A2(_elm_lang$core$Array$get, x, squares);
+				},
+				indList)) ? A2(
+			_elm_lang$core$Maybe$withDefault,
+			_elm_lang$core$Maybe$Nothing,
+			A2(
+				_elm_lang$core$Array$get,
+				A2(
+					_elm_lang$core$Maybe$withDefault,
+					-1,
+					_elm_lang$core$List$head(indList)),
+				squares)) : _elm_lang$core$Maybe$Nothing;
+	};
+	return _elm_lang$core$List$head(
+		A2(_elm_lang$core$List$filterMap, lineWinner, _user$project$Board$boardDiagonals));
+};
 var _user$project$Board$squareToString = function (square) {
-	var _p0 = square;
-	if (_p0.ctor === 'Nothing') {
+	var _p3 = square;
+	if (_p3.ctor === 'Nothing') {
 		return '';
 	} else {
-		return _user$project$Player$playerToString(_p0._0);
+		return _user$project$Player$playerToString(_p3._0);
 	}
 };
 var _user$project$Board$Done = function (a) {
 	return {ctor: 'Done', _0: a};
+};
+var _user$project$Board$getGameWinner = function (boards) {
+	var lineWinner = function (indList) {
+		if (_user$project$Board$allAreSame(
+			A2(
+				_elm_lang$core$List$map,
+				function (x) {
+					return A2(_elm_lang$core$Array$get, x, boards);
+				},
+				indList))) {
+			var index = A2(
+				_elm_lang$core$Maybe$withDefault,
+				-1,
+				_elm_lang$core$List$head(indList));
+			var board = A2(
+				_elm_lang$core$Maybe$withDefault,
+				_user$project$Board$Done(_elm_lang$core$Maybe$Nothing),
+				A2(_elm_lang$core$Array$get, index, boards));
+			var _p4 = board;
+			if ((_p4.ctor === 'Done') && (_p4._0.ctor === 'Just')) {
+				return _elm_lang$core$Maybe$Just(_p4._0._0);
+			} else {
+				return _elm_lang$core$Maybe$Nothing;
+			}
+		} else {
+			return _elm_lang$core$Maybe$Nothing;
+		}
+	};
+	return _elm_lang$core$List$head(
+		A2(_elm_lang$core$List$filterMap, lineWinner, _user$project$Board$boardDiagonals));
 };
 var _user$project$Board$Playing = function (a) {
 	return {ctor: 'Playing', _0: a};
@@ -9300,6 +9543,16 @@ var _user$project$Model$Won = function (a) {
 	return {ctor: 'Won', _0: a};
 };
 var _user$project$Model$Started = {ctor: 'Started'};
+var _user$project$Model$checkGameWinner = function (model) {
+	var gameFull = _user$project$Board$isGameFull(model.boards);
+	var winner = _user$project$Board$getGameWinner(model.boards);
+	var _p0 = winner;
+	if (_p0.ctor === 'Nothing') {
+		return gameFull ? _user$project$Model$Drawn : _user$project$Model$Started;
+	} else {
+		return _user$project$Model$Won(_p0._0);
+	}
+};
 var _user$project$Model$Connecting = {ctor: 'Connecting'};
 var _user$project$Model$initialModel = {
 	boards: A2(
@@ -9701,319 +9954,72 @@ var _user$project$Send$sendClick = F2(
 			_user$project$Server$address,
 			A2(_elm_lang$core$Json_Encode$encode, 0, encodeClick));
 	});
-var _user$project$Update$noNothings = function (xs) {
-	var isNothing = function (v) {
-		var _p0 = v;
-		if (_p0.ctor === 'Nothing') {
-			return true;
-		} else {
-			return false;
-		}
-	};
-	return !A2(
-		_elm_lang$core$List$any,
-		isNothing,
-		A3(
-			_elm_lang$core$Array$foldl,
-			F2(
-				function (x, y) {
-					return {ctor: '::', _0: x, _1: y};
-				}),
-			{ctor: '[]'},
-			xs));
-};
-var _user$project$Update$noPlayings = function (xs) {
-	var isPlaying = function (v) {
-		var _p1 = v;
-		if (_p1.ctor === 'Playing') {
-			return true;
-		} else {
-			return false;
-		}
-	};
-	return !A2(
-		_elm_lang$core$List$any,
-		isPlaying,
-		A3(
-			_elm_lang$core$Array$foldl,
-			F2(
-				function (x, y) {
-					return {ctor: '::', _0: x, _1: y};
-				}),
-			{ctor: '[]'},
-			xs));
-};
-var _user$project$Update$allAreSame = function (xs) {
-	var _p2 = xs;
-	if (_p2.ctor === '[]') {
-		return true;
-	} else {
-		return A2(
-			_elm_lang$core$List$all,
-			F2(
-				function (x, y) {
-					return _elm_lang$core$Native_Utils.eq(x, y);
-				})(_p2._0),
-			_p2._1);
-	}
-};
-var _user$project$Update$boardDiagonals = {
-	ctor: '::',
-	_0: {
-		ctor: '::',
-		_0: 0,
-		_1: {
-			ctor: '::',
-			_0: 1,
-			_1: {
-				ctor: '::',
-				_0: 2,
-				_1: {ctor: '[]'}
-			}
-		}
-	},
-	_1: {
-		ctor: '::',
-		_0: {
-			ctor: '::',
-			_0: 3,
-			_1: {
-				ctor: '::',
-				_0: 4,
-				_1: {
-					ctor: '::',
-					_0: 5,
-					_1: {ctor: '[]'}
-				}
-			}
-		},
-		_1: {
-			ctor: '::',
-			_0: {
-				ctor: '::',
-				_0: 6,
-				_1: {
-					ctor: '::',
-					_0: 7,
-					_1: {
-						ctor: '::',
-						_0: 8,
-						_1: {ctor: '[]'}
-					}
-				}
-			},
-			_1: {
-				ctor: '::',
-				_0: {
-					ctor: '::',
-					_0: 0,
-					_1: {
-						ctor: '::',
-						_0: 3,
-						_1: {
-							ctor: '::',
-							_0: 6,
-							_1: {ctor: '[]'}
-						}
-					}
-				},
-				_1: {
-					ctor: '::',
-					_0: {
-						ctor: '::',
-						_0: 1,
-						_1: {
-							ctor: '::',
-							_0: 4,
-							_1: {
-								ctor: '::',
-								_0: 7,
-								_1: {ctor: '[]'}
-							}
-						}
-					},
-					_1: {
-						ctor: '::',
-						_0: {
-							ctor: '::',
-							_0: 2,
-							_1: {
-								ctor: '::',
-								_0: 5,
-								_1: {
-									ctor: '::',
-									_0: 8,
-									_1: {ctor: '[]'}
-								}
-							}
-						},
-						_1: {
-							ctor: '::',
-							_0: {
-								ctor: '::',
-								_0: 0,
-								_1: {
-									ctor: '::',
-									_0: 4,
-									_1: {
-										ctor: '::',
-										_0: 8,
-										_1: {ctor: '[]'}
-									}
-								}
-							},
-							_1: {
-								ctor: '::',
-								_0: {
-									ctor: '::',
-									_0: 2,
-									_1: {
-										ctor: '::',
-										_0: 4,
-										_1: {
-											ctor: '::',
-											_0: 6,
-											_1: {ctor: '[]'}
-										}
-									}
-								},
-								_1: {ctor: '[]'}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-};
-var _user$project$Update$getGameWinner = function (boards) {
-	var lineWinner = function (indList) {
-		if (_user$project$Update$allAreSame(
-			A2(
-				_elm_lang$core$List$map,
-				function (x) {
-					return A2(_elm_lang$core$Array$get, x, boards);
-				},
-				indList))) {
-			var index = A2(
-				_elm_lang$core$Maybe$withDefault,
-				-1,
-				_elm_lang$core$List$head(indList));
-			var board = A2(
-				_elm_lang$core$Maybe$withDefault,
-				_user$project$Board$Done(_elm_lang$core$Maybe$Nothing),
-				A2(_elm_lang$core$Array$get, index, boards));
-			var _p3 = board;
-			if ((_p3.ctor === 'Done') && (_p3._0.ctor === 'Just')) {
-				return _elm_lang$core$Maybe$Just(_p3._0._0);
-			} else {
-				return _elm_lang$core$Maybe$Nothing;
-			}
-		} else {
-			return _elm_lang$core$Maybe$Nothing;
-		}
-	};
-	return _elm_lang$core$List$head(
-		A2(_elm_lang$core$List$filterMap, lineWinner, _user$project$Update$boardDiagonals));
-};
-var _user$project$Update$getWinner = function (squares) {
-	var lineWinner = function (indList) {
-		return _user$project$Update$allAreSame(
-			A2(
-				_elm_lang$core$List$map,
-				function (x) {
-					return A2(_elm_lang$core$Array$get, x, squares);
-				},
-				indList)) ? A2(
-			_elm_lang$core$Maybe$withDefault,
-			_elm_lang$core$Maybe$Nothing,
-			A2(
-				_elm_lang$core$Array$get,
-				A2(
-					_elm_lang$core$Maybe$withDefault,
-					-1,
-					_elm_lang$core$List$head(indList)),
-				squares)) : _elm_lang$core$Maybe$Nothing;
-	};
-	return _elm_lang$core$List$head(
-		A2(_elm_lang$core$List$filterMap, lineWinner, _user$project$Update$boardDiagonals));
-};
 var _user$project$Update$squareClick = F3(
 	function (board, player, index) {
-		var _p4 = board;
-		if (_p4.ctor === 'Done') {
+		var _p0 = board;
+		if (_p0.ctor === 'Done') {
 			return board;
 		} else {
-			var _p6 = _p4._0;
+			var _p2 = _p0._0;
 			if (_elm_lang$core$Native_Utils.eq(
 				A2(
 					_elm_lang$core$Maybe$withDefault,
 					_elm_lang$core$Maybe$Nothing,
-					A2(_elm_lang$core$Array$get, index, _p6)),
+					A2(_elm_lang$core$Array$get, index, _p2)),
 				_elm_lang$core$Maybe$Nothing)) {
 				var newsquares = A3(
 					_elm_lang$core$Array$set,
 					index,
 					_elm_lang$core$Maybe$Just(player),
-					_p6);
-				var winner = _user$project$Update$getWinner(newsquares);
-				var boardFilled = _user$project$Update$noNothings(newsquares);
-				var _p5 = winner;
-				if (_p5.ctor === 'Nothing') {
+					_p2);
+				var winner = _user$project$Board$getBoardWinner(newsquares);
+				var boardFilled = _user$project$Board$isBoardFull(newsquares);
+				var _p1 = winner;
+				if (_p1.ctor === 'Nothing') {
 					return boardFilled ? _user$project$Board$Done(_elm_lang$core$Maybe$Nothing) : _user$project$Board$Playing(newsquares);
 				} else {
 					return _user$project$Board$Done(
-						_elm_lang$core$Maybe$Just(_p5._0));
+						_elm_lang$core$Maybe$Just(_p1._0));
 				}
 			} else {
 				return board;
 			}
 		}
 	});
-var _user$project$Update$checkGameWinner = function (model) {
-	var gameFull = _user$project$Update$noPlayings(model.boards);
-	var winner = _user$project$Update$getGameWinner(model.boards);
-	var _p7 = winner;
-	if (_p7.ctor === 'Nothing') {
-		return gameFull ? _user$project$Model$Drawn : _user$project$Model$Started;
-	} else {
-		return _user$project$Model$Won(_p7._0);
-	}
-};
 var _user$project$Update$boardClick = F3(
 	function (model, bindex, sindex) {
 		var board = A2(_elm_lang$core$Array$get, bindex, model.boards);
 		var newboard = function () {
-			var _p8 = board;
-			if (_p8.ctor === 'Just') {
+			var _p3 = board;
+			if (_p3.ctor === 'Just') {
 				return _elm_lang$core$Maybe$Just(
-					A3(_user$project$Update$squareClick, _p8._0, model.turn, sindex));
+					A3(_user$project$Update$squareClick, _p3._0, model.turn, sindex));
 			} else {
 				return _elm_lang$core$Maybe$Nothing;
 			}
 		}();
 		var newturn = _elm_lang$core$Native_Utils.eq(newboard, board) ? model.turn : _user$project$Player$togglePlayer(model.turn);
-		var _p9 = newboard;
-		if (_p9.ctor === 'Nothing') {
+		var _p4 = newboard;
+		if (_p4.ctor === 'Nothing') {
 			return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 		} else {
-			var _p11 = _p9._0;
+			var _p6 = _p4._0;
 			var isBoardFull = function (b) {
-				var _p10 = b;
-				if (_p10.ctor === 'Done') {
+				var _p5 = b;
+				if (_p5.ctor === 'Done') {
 					return true;
 				} else {
 					return false;
 				}
 			};
-			var thisBoardFull = isBoardFull(_p11);
+			var thisBoardFull = isBoardFull(_p6);
 			var newmodel = _elm_lang$core$Native_Utils.update(
 				model,
 				{
 					turn: newturn,
-					boards: A3(_elm_lang$core$Array$set, bindex, _p11, model.boards)
+					boards: A3(_elm_lang$core$Array$set, bindex, _p6, model.boards)
 				});
-			var gamestate = _user$project$Update$checkGameWinner(newmodel);
+			var gamestate = _user$project$Model$checkGameWinner(newmodel);
 			var nextBoard = A2(
 				_elm_lang$core$Maybe$withDefault,
 				_user$project$Board$Done(_elm_lang$core$Maybe$Nothing),
@@ -10031,20 +10037,20 @@ var _user$project$Update$boardClick = F3(
 	});
 var _user$project$Update$update = F2(
 	function (msg, model) {
-		var _p12 = msg;
-		switch (_p12.ctor) {
+		var _p7 = msg;
+		switch (_p7.ctor) {
 			case 'Restart':
 				return {ctor: '_Tuple2', _0: _user$project$Model$initialModel, _1: _elm_lang$core$Platform_Cmd$none};
 			case 'SquareClick':
-				var _p15 = _p12._1;
-				var _p14 = _p12._0;
+				var _p10 = _p7._1;
+				var _p9 = _p7._0;
 				if (_elm_lang$core$Native_Utils.eq(model.game, _user$project$Model$Started)) {
 					if (_elm_lang$core$Native_Utils.eq(model.turn, model.iam)) {
-						var _p13 = model.boardToPlay;
-						if (_p13.ctor === 'Nothing') {
-							return A3(_user$project$Update$boardClick, model, _p14, _p15);
+						var _p8 = model.boardToPlay;
+						if (_p8.ctor === 'Nothing') {
+							return A3(_user$project$Update$boardClick, model, _p9, _p10);
 						} else {
-							return _elm_lang$core$Native_Utils.eq(_p13._0, _p14) ? A3(_user$project$Update$boardClick, model, _p14, _p15) : {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+							return _elm_lang$core$Native_Utils.eq(_p8._0, _p9) ? A3(_user$project$Update$boardClick, model, _p9, _p10) : {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 						}
 					} else {
 						return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
@@ -10053,17 +10059,17 @@ var _user$project$Update$update = F2(
 					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 				}
 			case 'ReceiveClick':
-				var _p18 = _p12._1;
-				var _p17 = _p12._0;
+				var _p13 = _p7._1;
+				var _p12 = _p7._0;
 				if (_elm_lang$core$Native_Utils.eq(model.game, _user$project$Model$Started)) {
 					if (_elm_lang$core$Native_Utils.eq(model.turn, model.iam)) {
 						return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 					} else {
-						var _p16 = model.boardToPlay;
-						if (_p16.ctor === 'Nothing') {
-							return A3(_user$project$Update$boardClick, model, _p17, _p18);
+						var _p11 = model.boardToPlay;
+						if (_p11.ctor === 'Nothing') {
+							return A3(_user$project$Update$boardClick, model, _p12, _p13);
 						} else {
-							return _elm_lang$core$Native_Utils.eq(_p16._0, _p17) ? A3(_user$project$Update$boardClick, model, _p17, _p18) : {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+							return _elm_lang$core$Native_Utils.eq(_p11._0, _p12) ? A3(_user$project$Update$boardClick, model, _p12, _p13) : {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 						}
 					}
 				} else {
@@ -10074,7 +10080,7 @@ var _user$project$Update$update = F2(
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{game: _user$project$Model$Started, iam: _p12._0, turn: _p12._1}),
+						{game: _user$project$Model$Started, iam: _p7._0, turn: _p7._1}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			default:
