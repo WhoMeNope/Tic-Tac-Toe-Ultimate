@@ -7,7 +7,8 @@ import (
 )
 
 func connect(c1, c2 *websocket.Conn) {
-	err := c1.WriteJSON(newConnectedMessage(true, true))
+	var err error
+	err = c1.WriteJSON(newConnectedMessage(true, true))
 	if err != nil {
 		log.Println("write:", err)
 		return

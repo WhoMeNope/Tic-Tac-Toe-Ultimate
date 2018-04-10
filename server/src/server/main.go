@@ -34,8 +34,7 @@ func main() {
 	flag.Parse()
 	log.SetFlags(0)
 
-	fs := http.FileServer(http.Dir("."))
-	http.Handle("/", fs)
+	http.Handle("/", http.FileServer(http.Dir(".")))
 
 	connsQueue = make(chan *websocket.Conn, 100)
 	http.HandleFunc("/match", match)

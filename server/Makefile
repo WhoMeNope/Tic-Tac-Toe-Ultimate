@@ -9,5 +9,4 @@ run:
 clean:
 	rm server
 
-.PHONY:
-	clean
+.PHONY: build run clean
